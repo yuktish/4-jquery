@@ -1,0 +1,236 @@
+<html>
+
+  <head>
+  
+    <title>Web Development Editor</title>
+	
+	<script type="text/javascript" src="jquery.min.js"></script>
+	
+	<style type="text/css">
+	
+	  body{
+	  
+	    font-family:sans-serif;
+		padding:0;
+		margin:0;
+	  
+	  }
+	  
+	  #header{
+	  
+	    width:100%;
+		background-color:#EEEEEE;
+		height:30px;
+		
+	  
+	  }
+	  
+	  #logo{
+	  
+	    float:left;
+		font-weight:bold;
+		font-size:120%;
+	  
+	  }
+	  
+	  #menucontainer{
+	  
+	    width:200px;
+		position:relative;
+		left:5px;
+	  
+	  }
+	  
+	  .menubutton{
+	  
+	    float:left;
+		border:1px solid grey;
+		padding-left:5px;
+		border-right:none;
+	  
+	  }
+	  
+	  #file{
+	  
+	    border-top-left-radius:4px;
+		border-bottom-left-radius:4px;
+	  
+	  }
+	  
+	  #save{
+	  
+	    border-top-right-radius:4px;
+		border-bottom-right-radius:4px;
+		border-right:1px solid grey;
+	  
+	  }
+	  
+	  #buttoncontainer{
+	  
+	    width:300px;
+		margin:0 auto;
+		
+	  
+	  }
+	  
+	  .togglebutton{
+	  
+	    float:left;
+		border:1px solid grey;
+		padding-left:5px;
+		border-right:none;
+	  
+	  }
+	  
+	  #html{
+	  
+	    border-top-left-radius:4px;
+		border-bottom-left-radius:4px;
+	  
+	  }
+	  
+	  #output{
+	  
+	    border-top-right-radius:4px;
+		border-bottom-right-radius:4px;
+		border-right:1px solid grey;
+	  
+	  }
+	  
+	  .active{
+	  
+	    background-color:#A3E2FF;
+	  
+	  }
+	  
+	  .highlightedbutton{
+	  
+	    background-color:grey;
+	  
+	  }
+	  
+	  textarea{
+	  
+	    width:50%;
+		resize:none;
+		border-top:none;
+	  
+	  }
+	  
+	  .panel{
+	  
+	    float:left;
+		width:50%;
+		border-left:none;
+	  
+	  }
+	  
+	  iframe{
+	  
+	    border:none;
+	  
+	  }
+	  
+	  .hidden{
+	  
+	    display:none;
+	  
+	  }
+	
+	</style>
+  
+  </head>
+  
+  <body>
+  
+    <div id="header">
+	
+	  <div id="logo">
+	  
+	    EE Editor
+		
+	  </div>
+	  
+	  <div id="menucontainer">
+	  
+	    <div class="menubutton" id="file">File</div>
+		
+		<div class="menubutton" id="edit">Edit</div>
+		
+		<div class="menubutton" id="save">Save</div>
+	  
+	  </div>
+
+	  <div id="buttoncontainer">
+	  
+	    <div class="togglebutton active" id="html">HTML</div>
+		
+		<div class="togglebutton" id="css">CSS</div>
+		
+		<div class="togglebutton" id="javascript">JavaScript</div>
+		
+		<div class="togglebutton active" id="output">Output</div>
+	  
+	  </div>
+	  
+	</div>
+	
+	<div id="bodycontainer">
+	
+	  <textarea class="panel" id="htmlpanel"><p id="paragraph">Hello!</p></textarea>
+	  
+	  <textarea class="panel hidden" id="csspanel">p{color:green;}</textarea>
+	  
+	  <textarea class="panel hidden" id="javascriptpanel">document.getElementById("paragraph").innerHTML="Hi there!";</textarea>
+	  
+	  <iframe class="panel" id="ouputpanel"></iframe>
+	
+	</div>
+	
+	<script type="text/javascript">
+	
+	  function updateOutput(){
+	  
+	    $("iframe").contents().find("html").html("<html><head><style type='text/css'>"
+	  +$("#csspanel").val()+"</style></head><body>"+$("#htmlpanel").val()+"</body></html>");
+	  
+	  document.getElementById("ouputpanel").contentWindow.eval($("#javascriptpanel").val());
+	  
+	  
+	  
+	  }
+	  
+	  $(".togglebutton").hover(function(){
+	    $(this).addClass("highlightedbutton");
+	  },function(){
+	    $(this).removeClass("highlightedbutton");
+	  });
+	  
+	  $(".togglebutton").click(function(){
+	    $(this).toggleClass("active");
+		$(this).removeClass("highlightedbutton");
+		
+		var panelId=$(this).attr("id") + "panel";
+		
+		$("#"+panelId).toggleClass("hidden");
+		
+		var noOfActivePanels=4-$('.hidden').length
+		
+		$(".panel").width(($(window).width()/noOfActivePanels)-10);
+		
+	  });
+	  
+	  $(".panel").height($(window).height()-$("#header").height()-10);
+	  $(".panel").width(($(window).width()/2)-10);
+	  
+	  updateOutput();
+	  
+	  $("textarea").on('change keyup paste', function() {
+      updateOutput();
+});
+	
+	</script>
+  
+  </body>
+
+</html>
